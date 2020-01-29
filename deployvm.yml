@@ -1,12 +1,14 @@
 - name: Installation du serveur
   hosts: all
-  remote_user: root
   tasks:
+#    - name: install proxmox
+#      package:
+#        name: python-proxmoxer
+#        state: present
     - name: Installation de vm
       proxmox_kvm:
-       api_user    : root
+       api_user    : root@pam
        api_password: itescia
-       api_host    : pve
-       name        : spynal
+       api_host    : 192.168.56.129
+       name        : newmv
        node        : pve
-       vmid        : 109
