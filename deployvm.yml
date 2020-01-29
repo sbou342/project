@@ -1,0 +1,12 @@
+- name: Installation du serveur
+  hosts: all
+  remote_user: root
+  tasks:
+    - name: Installation de vm
+      proxmox_kvm:
+       api_user    : root
+       api_password: itescia
+       api_host    : pve
+       name        : spynal
+       node        : pve
+       vmid        : 109
