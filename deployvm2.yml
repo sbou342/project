@@ -1,0 +1,17 @@
+- name: Installation du serveur
+  hosts: all
+  tasks:
+#    - name: install proxmox
+#      package:
+#        name: python-proxmoxer
+#        state: present
+     - proxmox_kvm:
+        api_user    : root@pam
+        api_password: itescia
+        api_host    : 192.168.217.129
+        clone       : centos7   # The VM source
+        name        : templatetest  # The target VM name
+        node        : pve
+        storage     : DATA-VMS
+        format      : qcow2
+        timeout     : 500  # Note: The task can take a while. Adapt
