@@ -1,0 +1,33 @@
+---
+
+-
+  hosts: all
+  tasks:
+   - name: autorizer port 22
+     iptables:
+          chain: INPUT
+          comment: "Accept new SSH connections."
+          ctstate: NEW
+          destination_port: 22
+          jump: ACCEPT
+          protocol: tcp
+   - name: autorizer port 8006
+     iptables:
+          chain: INPUT
+          comment: "Accept new HTTPS connections."
+          ctstate: NEW
+          destination_port: 8006
+          jump: ACCEPT
+          protocol: tcp
+   - name: proxmox to proxmox
+     iptables:
+          chain : FORWARD
+          src_range : 192.168.56.129-192.168.56.131
+          dst_range : 192.168.56.129-192.168.56.131
+          jump : ACCEPT
+   - name: tout bloker
+     ipatables:
+          chain: INPUT
+          jump: DROP
+         
+ 

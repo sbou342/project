@@ -1,0 +1,26 @@
+- name: create-user
+  hosts: all
+  vars: 
+    list:
+     - 'test'
+     - 'test1'
+     - 'test2'   
+    mdp: "itescia"
+  tasks:
+   - name: Add the user 
+     user:
+      name: "{{ item }}"
+      shell: /bin/bash
+      generate_ssh_key: yes
+      ssh_key_bits: 2048
+      ssh_key_file: .ssh/id_rsa
+     loop : "{{ list }} "
+   - name: Set authorized key in alternate location
+     authorized_key:
+       user: "{{ item }}"
+       state: present
+       key: "{{ lookup('file', '/home/charlie/.ssh/id_rsa.pub') }}"
+       path: /etc/ssh/authorized_keys/charlie
+       manage_dir: False
+     loop : "{{ list }} "
+
