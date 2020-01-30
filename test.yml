@@ -1,11 +1,12 @@
 - name: Installation du serveur
   hosts: all
-  tasks:
+  vars: 
+    list:
+     - '192.168.56.129'
+     - '192.168.56.130'
+     - '192.168.56.131'   
+    mdp: "itescia"
+tasks:
     - name: Execute the command in remot
-      shell: useradd test4 -m -s /bin/bash -p itescia
-    - name: Execute the command in remot
-      shell: passwd test4
-    - name: Execute the command in remot
-      shell: itescia
-    - name: Execute the command in remot
-      shell: itescia
+      shell: ssh_copy-id itesciadmin@"{{ item }}" 
+      loop : "{{ list }} "
