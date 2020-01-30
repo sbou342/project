@@ -1,32 +1,13 @@
-#remote_user: root 
-#tasks: 
-#- name: Installer Git
-#apt: name=git state=latest
-- hosts : proxmox
+- hosts : hyperviseurs
   remote_user: root
   vars:
       userprox: "root@pam"
       userpasswd: "itescia"
-      apihost: '192.168.74.133'
+      apihost: '192.168.56.129'
       namenode:
-        - 'proxmox'
-        - 'proxmox3'
-        - 'proxmox4'
-          #namevm:
-          #- 'testvmansible11'
-          #- 'testvmansible12'
-          #- 'testvmansible13' 
-    #nodes-name:
-    #- 'proxmox'
-    # - 'proxmox3'
-    # - 'proxmox4'
-
-      package:
-        - 'python-pip'
-        - 'python-dev'
-        - 'build-essential'
-        - 'python-proxmoxer' 
-
+        - 'pve'
+        - 'pve2'
+        - 'pve3'
   tasks:
        - name: remplacer la source
          lineinfile:
@@ -36,13 +17,6 @@
          tags:
           - source
 
-       - name: installation proxmoxer
-         package:
-                 name: "{{ item }}"
-                 state: present
-         loop: "{{ package }}"
-         tags:
-          - proxmoxer
 
        - name: Deploiement d'une VM (contenaire)
          proxmox:
@@ -55,21 +29,10 @@
                 onboot: yes
                 storage: local-lvm
                 ostemplate: 'local:vztmpl/debian-9.0-standard_9.7-1_amd64.tar.gz'
-                #ctcores: 2
-                #ctmemory: 1024
-                #ctswap: 512
-                #ctdisk: 10
-                #ctstrorage: Proxmox
          tags:
           - deploy
          loop: "{{ namenode }}"
          loop_control:
            extended: yes
-
-
-                       
-        #tasks:
-        #- name: Installer Git
-        #apt: name=git state=latest
       
    
