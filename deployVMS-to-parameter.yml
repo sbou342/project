@@ -6,7 +6,5 @@
        api_user    : root@pam
        api_password: itescia
        api_host    : 192.168.56.129
-       clone       : centos7
-       node        : pve2
-       name        : test2
-       timeout     : 100000
+       name        : newmv
+       node        : pve
