@@ -1,0 +1,75 @@
+#remote_user: root 
+#tasks: 
+#- name: Installer Git
+#apt: name=git state=latest
+- hosts : proxmox
+  remote_user: root
+  vars:
+      userprox: "root@pam"
+      userpasswd: "itescia"
+      apihost: '192.168.74.133'
+      namenode:
+        - 'proxmox'
+        - 'proxmox3'
+        - 'proxmox4'
+          #namevm:
+          #- 'testvmansible11'
+          #- 'testvmansible12'
+          #- 'testvmansible13' 
+    #nodes-name:
+    #- 'proxmox'
+    # - 'proxmox3'
+    # - 'proxmox4'
+
+      package:
+        - 'python-pip'
+        - 'python-dev'
+        - 'build-essential'
+        - 'python-proxmoxer' 
+
+  tasks:
+       - name: remplacer la source
+         lineinfile:
+                path: /etc/apt/sources.list.d/pve-enterprise.list
+                regexp: '^deb (.*)$'
+                line: '#deb \1'
+         tags:
+          - source
+
+       - name: installation proxmoxer
+         package:
+                 name: "{{ item }}"
+                 state: present
+         loop: "{{ package }}"
+         tags:
+          - proxmoxer
+
+       - name: Deploiement d'une VM (contenaire)
+         proxmox:
+                node: "{{ item }}"
+                api_user: "{{ userprox }}"
+                api_password: "{{ userpasswd }}"
+                api_host: "{{ apihost }}"
+                password: itescia
+                hostname: "vmansible{{ ansible_loop.index0 }}"
+                onboot: yes
+                storage: local-lvm
+                ostemplate: 'local:vztmpl/debian-9.0-standard_9.7-1_amd64.tar.gz'
+                #ctcores: 2
+                #ctmemory: 1024
+                #ctswap: 512
+                #ctdisk: 10
+                #ctstrorage: Proxmox
+         tags:
+          - deploy
+         loop: "{{ namenode }}"
+         loop_control:
+           extended: yes
+
+
+                       
+        #tasks:
+        #- name: Installer Git
+        #apt: name=git state=latest
+      
+   
