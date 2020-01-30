@@ -1,0 +1,13 @@
+- name: Installation du serveur
+  hosts: all
+  tasks:
+  vars: 
+  namevm : "vmansible0"
+    - name: backup de vm
+      proxmox_kvm:
+       api_user    : root@pam
+       api_password: itescia
+       api_host    : 192.168.56.129
+       name        : "{{ namevm }}"
+       node        : pve
+       lock        : snapchot
