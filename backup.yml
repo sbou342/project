@@ -10,4 +10,4 @@
        api_host    : 192.168.56.129
        name        : "{{ namevm }}"
        node        : pve
-       lock        : snapchot
+       lock        : snapshot
