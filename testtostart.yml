@@ -1,0 +1,31 @@
+- name: Installation du serveur
+  hosts: all
+  tasks:
+    - name: Installation de vm
+      proxmox_kvm:
+       api_user    : root@pam
+       api_password: itescia
+       api_host    : 192.168.56.129
+       clone       : centos7
+       node        : pve2
+       name        : test2
+    - name: wait 300
+      wait_for:
+        timeout: 300
+      delegate_to: localhost
+    - name: start VM
+      proxmox_kvm:
+       api_user    : root@pam
+       api_password: itescia
+       api_host    : 192.168.56.129
+       name        : test2
+       node        : pve2
+       state       : started
+    - name: wait 300
+      wait_for:
+        timeout: 300
+      delegate_to: localhost
+    - name: Install apache httpd  (state=present is optional)
+      apt:
+        name: apache2
+        state: present     
